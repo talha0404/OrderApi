@@ -1,0 +1,73 @@
+# Ignore build and runtime artifacts
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.pdb
+*.log
+
+# Ignore user-specific and IDE files
+.vscode/
+.idea/
+*.suo
+*.user
+*.vcxproj*
+*.DS_Store
+
+# Ignore dependencies and package directories
+node_modules/
+packages/
+.env
+secrets.json
+
+# Ignore EF Core migrations and local database files
+Migrations/
+*.mdf
+*.ldf
+*.db
+*.sqlite
+app.db
+
+# Ignore logs and temporary files
+logs/
+*.log
+log/
+debug.log
+
+# Ignore compiled Razor views (if using Razor Pages)
+*.g.cs
+*.g.i.cs
+
+# Ignore .NET-specific files
+project.lock.json
+project.assets.json
+global.json
+nuget.config
+NuGet.Config
+nuget.exe
+*.nupkg
+*.snupkg
+
+# Ignore Rider & JetBrains files
+*.sln.iml
+.idea/
+*.dotCover
+*.sln.DotSettings*
+
+# Ignore Swagger files (if generated at runtime)
+swagger/
+
+# Ignore coverage reports (if using test coverage)
+coverage/
+*.coverage
+TestResults/
+
+# Ignore Docker-related files (if using Docker)
+docker-compose.override.yml
+.dockerignore
+**/Dockerfile
+
+# Ignore Publish & Deployment files
+publish/
+dist/
