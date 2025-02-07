@@ -1,4 +1,4 @@
-using OrderApi.Models;
+using OrderApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace OrderApi.Infrastructure.Data
