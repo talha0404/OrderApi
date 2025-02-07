@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OrderApi.Application.Common;
 using OrderApi.Domain.Common;
 using OrderApi.Infrastructure.Data;
 
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddInfrastructure();
 
 // Add services to the container.
+builder.Services.AddApplicationServices();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
