@@ -1,8 +1,7 @@
-namespace OrderApi.Models;
+namespace OrderApi.Domain.Entities;
 
-public class OrderDetail
+public class OrderDetail: BaseEntity
 {
-    public int Id { get; set; }
     public int OrderId { get; set; } // Order FK
     public int ProductId { get; set; } // Product FK
     public int Quantity { get; set; }
