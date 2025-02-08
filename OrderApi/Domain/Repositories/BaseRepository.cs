@@ -5,36 +5,37 @@ using OrderApi.Infrastructure.Data;
 
 namespace OrderApi.Domain.Repositories;
 
-public class BaseRepository<T>: IBaseRepository<T> where T : BaseEntity
+public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
 {
     protected readonly AppDbContext _context;
+    protected readonly DbSet<TEntity> _dbSet;
 
     public BaseRepository(AppDbContext context)
     {
         _context = context;
+        _dbSet = context.Set<TEntity>();
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
-
-    public async Task<T?> GetByIdAsync(int id) => await _context.Set<T>().FindAsync(id);
-
-    public async Task AddAsync(T entity)
+    public async Task<IEnumerable<TEntity>> GetAllAsync() => await _dbSet.ToListAsync();
+    public async Task<TEntity?> GetByIdAsync(int id) => await _dbSet.FindAsync(id);
+    public async Task<TEntity> AddAsync(TEntity entity)
     {
-        _context.Set<T>().Add(entity); 
-        await _context.SaveChangesAsync(); 
+        await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
+        return entity;
     }
-
-    public async Task UpdateAsync(T entity)
+    public async Task<TEntity> UpdateAsync(int id, TEntity entity)
     {
-        _context.Set<T>().Update(entity); await _context.SaveChangesAsync(); 
+        _dbSet.Update(entity);
+        await _context.SaveChangesAsync();
+        return entity;
     }
-
-    public async Task DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
-        var entity = await GetByIdAsync(id); 
-        if (entity != null) {
-            _context.Set<T>().Remove(entity); 
-            await _context.SaveChangesAsync(); 
-        } 
+        var entity = await GetByIdAsync(id);
+        if (entity == null) return false;
+        _dbSet.Remove(entity);
+        await _context.SaveChangesAsync();
+        return true;
     }
 }
