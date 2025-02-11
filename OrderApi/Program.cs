@@ -1,55 +1,34 @@
 using Microsoft.EntityFrameworkCore;
 using OrderApi.Application.Common;
-using OrderApi.Infrastructure.Data;
 using OrderApi.Domain.Common;
+using OrderApi.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
-
-// Registering DB Context (PostgreSQL in this case)
+// Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Registering application-specific services
-builder.Services.AddApplicationServices(); // Custom services (like services from Application layer)
+// Register specific repositories
+builder.Services.AddInfrastructure();
 
-// Registering infrastructure services
-builder.Services.AddInfrastructure(); // Infrastructure layer, if you have repositories or other infrastructure logic
+// Add services to the container.
+builder.Services.AddApplicationServices();
 
-// Registering controllers for API endpoints
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
-
-// Register Swagger for API documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Register Authentication (if needed)
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//     .AddJwtBearer(options => { /* Configure JWT bearer options */ });
-
 var app = builder.Build();
 
-// Configure middleware pipeline
-
-// Use Swagger and Swagger UI only in Development environment
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();  // Enables Swagger generation
-    app.UseSwaggerUI(); // Enables Swagger UI to view API documentation
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-// Enable HTTPS Redirection (forces HTTPS in production)
 app.UseHttpsRedirection();
-
-// Enable Authorization (if your API requires authentication)
-app.UseAuthorization();
-
-// Enable Routing
-app.UseRouting();
-
-// Map Controllers to handle API requests
 app.MapControllers();
-
-// Run the application
 app.Run();
