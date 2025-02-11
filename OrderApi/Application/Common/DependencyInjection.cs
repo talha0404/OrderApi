@@ -10,9 +10,8 @@ public static class DependencyInjection
     {
         // Register AutoMapper
         services.AddAutoMapper(typeof(MappingProfile));
+        
         // Register Services
-        services.AddScoped(typeof(IBaseService<>), typeof(BaseService<,>));
-
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IOrderService, OrderService>();
