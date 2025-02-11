@@ -1,59 +1,55 @@
 using Microsoft.EntityFrameworkCore;
 using OrderApi.Application.Common;
-using OrderApi.Domain.Common;
 using OrderApi.Infrastructure.Data;
+using OrderApi.Domain.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
+
+// Registering DB Context (PostgreSQL in this case)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register specific repositories
-builder.Services.AddInfrastructure();
+// Registering application-specific services
+builder.Services.AddApplicationServices(); // Custom services (like services from Application layer)
 
-// Add services to the container.
-builder.Services.AddApplicationServices();
+// Registering infrastructure services
+builder.Services.AddInfrastructure(); // Infrastructure layer, if you have repositories or other infrastructure logic
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Registering controllers for API endpoints
 builder.Services.AddControllers();
+
+// Register Swagger for API documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Register Authentication (if needed)
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//     .AddJwtBearer(options => { /* Configure JWT bearer options */ });
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure middleware pipeline
+
+// Use Swagger and Swagger UI only in Development environment
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwagger();  // Enables Swagger generation
+    app.UseSwaggerUI(); // Enables Swagger UI to view API documentation
 }
 
+// Enable HTTPS Redirection (forces HTTPS in production)
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// Enable Authorization (if your API requires authentication)
+app.UseAuthorization();
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
+// Enable Routing
+app.UseRouting();
 
+// Map Controllers to handle API requests
+app.MapControllers();
+
+// Run the application
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
