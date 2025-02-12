@@ -20,16 +20,23 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public async Task<TEntity?> GetByIdAsync(int id) => await _dbSet.FindAsync(id);
     public async Task<TEntity> AddAsync(TEntity entity)
     {
-        await _dbSet.AddAsync(entity);
+        var createdEntity = await _dbSet.AddAsync(entity); 
         await _context.SaveChangesAsync();
-        return entity;
+        return createdEntity.Entity;
     }
-    public async Task<TEntity> UpdateAsync(int id, TEntity entity)
+    public virtual async Task<TEntity> UpdateAsync(int id, TEntity entity)
     {
-        _dbSet.Update(entity);
+        var existingEntity = await _dbSet.FindAsync(id);
+
+        if (existingEntity == null)
+            throw new KeyNotFoundException("Entity not found");
+
+        _context.Entry(existingEntity).CurrentValues.SetValues(entity);
         await _context.SaveChangesAsync();
-        return entity;
+
+        return existingEntity;
     }
+
     public async Task<bool> DeleteAsync(int id)
     {
         var entity = await GetByIdAsync(id);
