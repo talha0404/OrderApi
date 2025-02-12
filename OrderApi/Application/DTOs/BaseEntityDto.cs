@@ -1,6 +1,6 @@
-namespace OrderApi.Domain.Entities;
+namespace OrderApi.Application.DTOs;
 
-public abstract class BaseEntity
+public abstract class BaseEntityDto
 {
     public int Id { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
