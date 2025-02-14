@@ -20,4 +20,10 @@ public class OrderService: BaseService<Order, OrderDto>, IOrderService
         var orders = await _orderRepository.GetOrdersByUserIdAsync(userId);
         return _mapper.Map<IEnumerable<OrderDto>>(orders);
     }
+
+    public async Task<decimal> GetTotalRevenueAllOrder()
+    {
+        var totalRevenue = await _orderRepository.GetTotalRevenueAllOrder();
+        return totalRevenue;
+    }
 }
