@@ -20,4 +20,11 @@ public class UserService: BaseService<User, UserDto>, IUserService
         var user = await _userRepository.GetUserByEmailAsync(email);
         return _mapper.Map<UserDto>(user);
     }
+    
+    
+    public async Task<IEnumerable<UserDto?>> GetUsersSpentOverThousand()
+    {
+        var user = await _userRepository.GetUsersSpentOverThousand();
+        return _mapper.Map<IEnumerable<UserDto>>(user);
+    }
 }

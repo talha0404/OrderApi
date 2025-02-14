@@ -48,4 +48,11 @@ public class UserController : BaseApiController
         await _userService.DeleteAsync(id);
         return NoContent();
     }
+    
+    [HttpGet("GetUsersSpentOverThousand")]
+    public async Task<IActionResult> GetUsersSpentOverThousand()
+    {
+        var users = await _userService.GetUsersSpentOverThousand();
+        return Ok(users);
+    }
 }
