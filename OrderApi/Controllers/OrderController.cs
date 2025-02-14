@@ -48,5 +48,12 @@ public class OrderController : BaseApiController
         await _orderService.DeleteAsync(id);
         return NoContent();
     }
+
+    [HttpGet("GetTotalRevenueAllOrders")]
+    public async Task<IActionResult> GetTotalRevenueAllOrders()
+    {
+        var revenue = await _orderService.GetTotalRevenueAllOrder();
+        return Ok(revenue);
+    }
 }
 
