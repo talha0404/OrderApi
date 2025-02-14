@@ -48,4 +48,25 @@ public class ProductController : BaseApiController
         await _productService.DeleteAsync(id);
         return NoContent();
     }
+
+    [HttpGet("GetProductsSpecificCategory/{categoryId}")]
+    public async Task<IActionResult> GetProductsSpecificCategory(int categoryId)
+    {
+        var products = await _productService.GetProductsByCategoryAsync(categoryId);
+        return Ok(products);
+    }
+    
+    [HttpGet("GetMostExpensiveProduct")]
+    public async Task<IActionResult> GetMostExpensiveProduct()
+    {
+        var product = await _productService.GetMostExpensiveProduct();
+        return Ok(product);
+    }
+    
+    [HttpGet("GetAveragePricesElectronicsProduct")]
+    public async Task<IActionResult> GetAveragePricesElectronicsProduct()
+    {
+        var product = await _productService.GetAveragePricesElectronicsProduct();
+        return Ok(product);
+    }
 }

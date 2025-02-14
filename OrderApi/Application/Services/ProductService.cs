@@ -18,6 +18,18 @@ public class ProductService: BaseService<Product,ProductDto>, IProductService
     public async Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId)
     {
         var products = await _productRepository.GetByCategoryIdAsync(categoryId);
-        return _mapper.Map<IEnumerable<ProductDto>>(new Product());
+        return _mapper.Map<IEnumerable<ProductDto>>(products);
+    }
+
+    public async Task<ProductDto> GetMostExpensiveProduct()
+    {
+        var product = await _productRepository.GetMostExpensiveProduct();
+        return _mapper.Map<ProductDto>(product);
+    }
+    
+    public async Task<decimal> GetAveragePricesElectronicsProduct()
+    {
+        var averagedPrice = await _productRepository.GetAveragePricesElectronicsProduct();
+        return _mapper.Map<decimal>(averagedPrice);
     }
 }
