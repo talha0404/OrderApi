@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using OrderApi.Application.Common;
 using OrderApi.Domain.Common;
+using OrderApi.Domain.Interfaces;
+using OrderApi.Domain.Repositories;
 using OrderApi.Infrastructure.Data;
+using OrderApi.Infrastructure.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,8 @@ builder.Services.AddInfrastructure();
 
 // Add services to the container.
 builder.Services.AddApplicationServices();
+
+builder.Services.AddScoped<ILoggerService, LoggerService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
