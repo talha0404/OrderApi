@@ -4,5 +4,5 @@ namespace OrderApi.Application.Interfaces;
 
 public interface ICategoryService: IBaseService<CategoryDto>
 {
-    Task<IEnumerable<CategoryDto>> GetCategoriesByNameAsync(string name);
+    Task<CategoryDto> GetCategoriesByNameAsync(string name);
 }

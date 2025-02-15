@@ -48,4 +48,11 @@ public class CategoryController : BaseApiController
         await _categoryService.DeleteAsync(id);
         return NoContent();
     }
+    
+    [HttpGet("GetCategoriesByName")]
+    public async Task<IActionResult> GetCategoriesByNameAsync(string name)
+    {
+        var categories = await _categoryService.GetCategoriesByNameAsync(name);
+        return Ok(categories);
+    }
 }
