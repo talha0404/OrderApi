@@ -16,43 +16,44 @@ public class UserController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var users = await _userService.GetAllAsync();
-        return Ok(users);
+        var result = await _userService.GetAllAsync();
+
+        return HandleResult(result);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var user = await _userService.GetByIdAsync(id);
-        if (user == null) return NotFound();
-        return Ok(user);
+        var result = await _userService.GetByIdAsync(id);
+        return HandleResult(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(UserDto userDto)
     {
-        var user = await _userService.AddAsync(userDto);
-        return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
+        var result = await _userService.AddAsync(userDto);
+
+        return HandleCreatedResult(result, nameof(GetById), new { id = result.Data.Id });
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UserDto userDto)
     {
-        await _userService.UpdateAsync(id, userDto);
-        return NoContent();
+        var result = await _userService.UpdateAsync(id, userDto);
+        return HandleResult(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _userService.DeleteAsync(id);
-        return NoContent();
+        var result = await _userService.DeleteAsync(id);
+        return HandleNoContentResult(result);
     }
-    
+
     [HttpGet("GetUsersSpentOverThousand")]
     public async Task<IActionResult> GetUsersSpentOverThousand()
     {
-        var users = await _userService.GetUsersSpentOverThousand();
-        return Ok(users);
+        var result = await _userService.GetUsersSpentOverThousand();
+        return HandleResult(result);
     }
 }
