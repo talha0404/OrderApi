@@ -71,3 +71,8 @@ docker-compose.override.yml
 # Ignore Publish & Deployment files
 publish/
 dist/
+
+FileContentIndex/
+v17/
+ProjectEvaluation/
+DesignTimeBuild/
