@@ -72,7 +72,4 @@ docker-compose.override.yml
 publish/
 dist/
 
-FileContentIndex/
-v17/
-ProjectEvaluation/
-DesignTimeBuild/
+.vs/
