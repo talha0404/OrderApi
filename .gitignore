@@ -71,3 +71,5 @@ docker-compose.override.yml
 # Ignore Publish & Deployment files
 publish/
 dist/
+
+.vs/

@@ -1,12 +1,12 @@
-using OrderApi.Domain.Entities;
+using OrderApi.Application.Common.Result;
 
 namespace OrderApi.Application.Interfaces;
 
 public interface IBaseService<TDto>
 {
-    Task<IEnumerable<TDto>> GetAllAsync();
-    Task<TDto?> GetByIdAsync(int id);
-    Task<TDto> AddAsync(TDto dto);
-    Task<TDto> UpdateAsync(int id, TDto dto);
-    Task<bool> DeleteAsync(int id);
+    Task<Result<IEnumerable<TDto>>> GetAllAsync();
+    Task<Result<TDto>> GetByIdAsync(int id);
+    Task<Result<TDto>> AddAsync(TDto dto);
+    Task<Result<TDto>> UpdateAsync(int id, TDto dto);
+    Task<Result<bool>> DeleteAsync(int id);
 }

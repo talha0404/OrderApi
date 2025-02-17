@@ -16,44 +16,43 @@ public class OrderController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var orders = await _orderService.GetAllAsync();
-        return Ok(orders);
+        var result = await _orderService.GetAllAsync();
+        return HandleResult(result);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var order = await _orderService.GetByIdAsync(id);
-        if (order == null) return NotFound();
-        return Ok(order);
+        var result = await _orderService.GetByIdAsync(id);
+        return HandleResult(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(OrderDto orderDto)
     {
-        var order = await _orderService.AddAsync(orderDto);
-        return CreatedAtAction(nameof(GetById), new { id = order.Id }, order);
+        var result = await _orderService.AddAsync(orderDto);
+        return HandleCreatedResult(result, nameof(GetById), new { id = result.Data.Id });
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, OrderDto orderDto)
     {
-        await _orderService.UpdateAsync(id, orderDto);
-        return NoContent();
+        var result = await _orderService.UpdateAsync(id, orderDto);
+        return HandleNoContentResult(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _orderService.DeleteAsync(id);
-        return NoContent();
+        var result = await _orderService.DeleteAsync(id);
+        return HandleNoContentResult(result);
     }
 
     [HttpGet("GetTotalRevenueAllOrders")]
     public async Task<IActionResult> GetTotalRevenueAllOrders()
     {
-        var revenue = await _orderService.GetTotalRevenueAllOrder();
-        return Ok(revenue);
+        var result = await _orderService.GetTotalRevenueAllOrder();
+        return HandleResult(result);
     }
 }
 

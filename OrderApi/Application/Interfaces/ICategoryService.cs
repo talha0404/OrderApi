@@ -1,8 +1,9 @@
+using OrderApi.Application.Common.Result;
 using OrderApi.Application.DTOs;
 
 namespace OrderApi.Application.Interfaces;
 
-public interface ICategoryService: IBaseService<CategoryDto>
+public interface ICategoryService : IBaseService<CategoryDto>
 {
-    Task<CategoryDto> GetCategoriesByNameAsync(string name);
+    Task<Result<CategoryDto>> GetCategoriesByNameAsync(string name);
 }

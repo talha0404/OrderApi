@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OrderApi.Application.Common;
 using OrderApi.Domain.Common;
-using OrderApi.Domain.Interfaces;
-using OrderApi.Domain.Repositories;
 using OrderApi.Infrastructure.Data;
 using OrderApi.Infrastructure.Logging;
 

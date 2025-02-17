@@ -16,43 +16,45 @@ public class CategoryController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var categories = await _categoryService.GetAllAsync();
-        return Ok(categories);
+        var result = await _categoryService.GetAllAsync();
+
+        return HandleResult(result);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var category = await _categoryService.GetByIdAsync(id);
-        if (category == null) return NotFound();
-        return Ok(category);
+        var result = await _categoryService.GetByIdAsync(id);
+
+        return HandleResult(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(CategoryDto categoryDto)
     {
-        var category = await _categoryService.AddAsync(categoryDto);
-        return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
+        var result = await _categoryService.AddAsync(categoryDto);
+
+        return HandleCreatedResult(result, nameof(GetById), new { id = result.Data?.Id });
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, CategoryDto categoryDto)
     {
-        await _categoryService.UpdateAsync(id, categoryDto);
-        return NoContent();
+        var result = await _categoryService.UpdateAsync(id, categoryDto);
+        return HandleNoContentResult(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _categoryService.DeleteAsync(id);
-        return NoContent();
+        var result = await _categoryService.DeleteAsync(id);
+        return HandleNoContentResult(result);
     }
-    
+
     [HttpGet("GetCategoriesByName")]
     public async Task<IActionResult> GetCategoriesByNameAsync(string name)
     {
-        var categories = await _categoryService.GetCategoriesByNameAsync(name);
-        return Ok(categories);
+        var result = await _categoryService.GetCategoriesByNameAsync(name);
+        return HandleResult(result);
     }
 }
