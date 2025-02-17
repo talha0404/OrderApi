@@ -1,11 +1,12 @@
+using OrderApi.Application.Common.Result;
 using OrderApi.Application.DTOs;
+
 
 namespace OrderApi.Application.Interfaces;
 
-public interface IProductService: IBaseService<ProductDto>
+public interface IProductService : IBaseService<ProductDto>
 {
-    Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId);
-    Task<ProductDto> GetMostExpensiveProduct();
-
-    Task<decimal> GetAveragePricesElectronicsProduct();
+    Task<Result<IEnumerable<ProductDto>>> GetProductsByCategoryAsync(int categoryId);
+    Task<Result<ProductDto>> GetMostExpensiveProduct();
+    Task<Result<decimal>> GetAveragePricesElectronicsProduct();
 }

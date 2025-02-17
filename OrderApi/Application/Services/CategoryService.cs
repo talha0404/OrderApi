@@ -1,4 +1,5 @@
 using AutoMapper;
+using OrderApi.Application.Common.Result;
 using OrderApi.Application.DTOs;
 using OrderApi.Application.Interfaces;
 using OrderApi.Domain.Entities;
@@ -7,29 +8,36 @@ using OrderApi.Infrastructure.Logging;
 
 namespace OrderApi.Application.Services;
 
-public class CategoryService:BaseService<Category,CategoryDto>, ICategoryService
+public class CategoryService : BaseService<Category, CategoryDto>, ICategoryService
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly ILoggerService _logger;
-    public CategoryService(ICategoryRepository categoryRepository, IMapper mapper, ILoggerService logger): base(categoryRepository, mapper)
+
+    public CategoryService(
+        ICategoryRepository categoryRepository,
+        IMapper mapper,
+        ILoggerService logger) : base(categoryRepository, mapper, logger)
     {
         _categoryRepository = categoryRepository;
         _logger = logger;
     }
-    
-    public async Task<CategoryDto> GetCategoriesByNameAsync(string name)
+
+    public async Task<Result<CategoryDto>> GetCategoriesByNameAsync(string name)
     {
-        _logger.LogInformation($"LOG: Attempting to retrieve product with name: {name}"); // Log before operation
         try
         {
-            var categories = await _categoryRepository.GetCategoryByNameAsync(name);
-            _logger.LogDebug($"LOG: Category retrieved successfully: {name}"); // Log detailed info
-            return _mapper.Map<CategoryDto>(categories);
+            _logger.LogInformation($"Getting category with name: {name}");
+            var category = await _categoryRepository.GetCategoryByNameAsync(name);
+            if (category == null)
+                return Result<CategoryDto>.Failure("Kategori bulunamadı");
+
+            var categoryDto = _mapper.Map<CategoryDto>(category);
+            return Result<CategoryDto>.Success(categoryDto);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"LOG: Error retrieving product with name: {name}", ex); // Log the exception
-            throw;
+            _logger.LogError($"Error retrieving category with name: {name}", ex);
+            return Result<CategoryDto>.Failure(ex.Message);
         }
     }
 }

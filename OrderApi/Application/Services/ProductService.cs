@@ -1,18 +1,20 @@
 using AutoMapper;
+using OrderApi.Application.Common.Result;
 using OrderApi.Application.DTOs;
 using OrderApi.Application.Interfaces;
 using OrderApi.Domain.Entities;
 using OrderApi.Domain.Interfaces;
+using OrderApi.Infrastructure.Logging;
 
 namespace OrderApi.Application.Services;
 
-public class ProductService: BaseService<Product,ProductDto>, IProductService
+public class ProductService : BaseService<Product, ProductDto>, IProductService
 {
     private readonly IProductRepository _productRepository;
     private readonly ILoggerService _logger;
 
     public ProductService(
-        IProductRepository productRepository, 
+        IProductRepository productRepository,
         IMapper mapper,
         ILoggerService logger) : base(productRepository, mapper, logger)
     {
@@ -20,58 +22,53 @@ public class ProductService: BaseService<Product,ProductDto>, IProductService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(int categoryId)
+    public async Task<Result<IEnumerable<ProductDto>>> GetProductsByCategoryAsync(int categoryId)
     {
         try
         {
             _logger.LogInformation($"Getting products for category ID: {categoryId}");
             var products = await _productRepository.GetByCategoryIdAsync(categoryId);
-            _logger.LogDebug($"Retrieved {products.Count} products for category ID: {categoryId}");
-            return _mapper.Map<IEnumerable<ProductDto>>(products);
+            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
+            return Result<IEnumerable<ProductDto>>.Success(productDtos);
         }
         catch (Exception ex)
         {
             _logger.LogError($"Error retrieving products for category ID: {categoryId}", ex);
-            throw;
+            return Result<IEnumerable<ProductDto>>.Failure(ex.Message);
         }
     }
 
-    public async Task<ProductDto> GetMostExpensiveProduct()
+    public async Task<Result<ProductDto>> GetMostExpensiveProduct()
     {
         try
         {
             _logger.LogInformation("Getting most expensive product");
             var product = await _productRepository.GetMostExpensiveProduct();
-            if (product != null)
-            {
-                _logger.LogDebug($"Most expensive product found: {product.Name} with price: {product.Price}");
-            }
-            else
-            {
-                _logger.LogWarning("No products found in the system");
-            }
-            return _mapper.Map<ProductDto>(product);
+            if (product == null)
+                return Result<ProductDto>.Failure("Ürün bulunamadı");
+
+            var productDto = _mapper.Map<ProductDto>(product);
+            return Result<ProductDto>.Success(productDto);
         }
         catch (Exception ex)
         {
             _logger.LogError("Error retrieving most expensive product", ex);
-            throw;
+            return Result<ProductDto>.Failure(ex.Message);
         }
     }
-    
-    public async Task<decimal> GetAveragePricesElectronicsProduct()
+
+    public async Task<Result<decimal>> GetAveragePricesElectronicsProduct()
     {
         try
         {
             _logger.LogInformation("Calculating average price for electronics products");
             var averagePrice = await _productRepository.GetAveragePricesElectronicsProduct();
-            _logger.LogDebug($"Average price for electronics products: {averagePrice}");
-            return _mapper.Map<decimal>(averagePrice);
+            return Result<decimal>.Success(averagePrice);
         }
         catch (Exception ex)
         {
             _logger.LogError("Error calculating average price for electronics products", ex);
-            throw;
+            return Result<decimal>.Failure(ex.Message);
         }
     }
 }
