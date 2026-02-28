@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using OrderApi.Application.Common;
-using OrderApi.Domain.Common;
-using OrderApi.Infrastructure.Data;
-using OrderApi.Infrastructure.Logging;
+using OrderApi.Application;
+using OrderApi.Infrastructre.Data;
+using OrderApi.Infrastructre.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +10,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register specific repositories
-builder.Services.AddInfrastructure();
-
 // Add services to the container.
 builder.Services.AddApplicationServices();
 
